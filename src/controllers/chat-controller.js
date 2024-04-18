@@ -4,9 +4,9 @@ const buildMessage = (message) => {
     return `data: ${message}\n\n`
 }
 
-const broadcast = (client, message) => {
+const broadcast = async (client, message) => {
     clients.forEach(c => {
-        if (client.username != c.username) {
+        if (client.nickname != c.nickname) {
             c.write(buildMessage(message))
         }
     })
@@ -15,7 +15,7 @@ const broadcast = (client, message) => {
 const chatController = {
     sendEvents: (request, payloadClient) => {
         try {
-            payloadClient.username = request.query.username
+            payloadClient.nickname = request.query.nickname
     
             payloadClient.writeHead(200, {
                 "Content-Type": "text/event-stream",
@@ -25,13 +25,14 @@ const chatController = {
     
 
 
-            const client = clients.find((client) => payloadClient.username === client && client.username)
+            const client = clients.find((client) => payloadClient.nickname === client && client.nickname)
 
             if (!client) {
-                console.log(`${payloadClient.username} connected`)
                 clients.push(payloadClient)
-                payloadClient.write(buildMessage('\n\n'))
-                broadcast(payloadClient, `${payloadClient.username} joined the chat!`)
+                console.log(`🖖 ${payloadClient.nickname} connected`)
+                
+                payloadClient.write(buildMessage(''))
+                broadcast(payloadClient, `🖖 ${payloadClient.nickname} joined the chat!`)
             }
 
             request.on('close', () => {
@@ -42,8 +43,22 @@ const chatController = {
         catch(error) {
             console.error(error)
         }
-    }
+    },
 
+    
+    sendMessage: async (request, response) => {
+        const { nickname, message } = request.body
+        const client = { nickname }
+
+        if (!message) {
+            return response.status(400).send({ success: false, message: 'Message is empty'})
+        }
+
+        const sendMessage = `💬 ${nickname}: ${message}`
+
+        await broadcast(client, sendMessage)
+        return response.status(200).send({ success: true, message: 'Sent message!' })
+    }
 }
 
 export default chatController
