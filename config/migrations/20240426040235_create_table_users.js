@@ -11,7 +11,7 @@ export const up = function (knex) {
         table.string('email').notNullable().unique()
         table.binary('avatar')
         table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
-        table.timestamp('updated_at').defaultTo(knex.fn.now())
+        table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
     })
 }
 
