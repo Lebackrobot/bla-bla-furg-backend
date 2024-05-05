@@ -5,9 +5,10 @@
 export const up = function(knex) {
   return knex.schema.createTable('chats', function (table) {
     table.increments('id').primary(),
-    table.string('visibility', ['PUBLIC', 'PRIVATE']).notNullable().unique()
+    table.string('visibility', ['PUBLIC', 'PRIVATE']).notNullable()
     table.string('title').notNullable()
     table.string('description').notNullable()
+    table.string('password')
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
   })

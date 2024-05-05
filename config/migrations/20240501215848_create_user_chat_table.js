@@ -3,11 +3,11 @@
  * @returns { Promise<void> }
  */
 export const up = function(knex) {
-  return knex.schema.createTable('user_chat', function(table) {
+  return knex.schema.createTable('users_chats', function(table) {
     table.increments('id').primary()
     table.integer('user_id').unsigned().notNullable()
     table.integer('chat_id').unsigned().notNullable()
-    table.string('role', ['HOST', 'MEMBER']).notNullable().unique(),
+    table.string('role', ['HOST', 'MEMBER']).notNullable(),
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
 
@@ -22,5 +22,5 @@ export const up = function(knex) {
  * @returns { Promise<void> }
  */
 export const down = function(knex) {
-    return knex.schema.dropTable('user_chat')    
+    return knex.schema.dropTable('users_chats')    
 };

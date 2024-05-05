@@ -7,7 +7,9 @@ export const up = function(knex) {
     table.increments('id').primary()
     table.integer('user_id').unsigned().notNullable()
     table.integer('chat_id').unsigned().notNullable()
-    table.string('message').notNullable()
+    table.string('content').notNullable()
+    table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
+    table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
 
     table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE')
     table.foreign('chat_id').references('id').inTable('chats').onDelete('CASCADE')
