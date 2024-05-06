@@ -2,6 +2,23 @@ import { messageCreateSchema } from '../../modules/messages/message.schema.js'
 import chatService from '../../services/chat/chat.service.js'
 import messageService from '../../services/message/message.service.js'
 import userChatService from '../../services/user-chat/user-chat.service.js'
+import { clients } from '../event-stream/event-stream.controller.js'
+
+const messageBroadcast = async (client, chat, message) => {
+    clients.forEach(async (c) => {
+        const { id: userId, nickname } = client
+        const { chatId } = chat
+        const { content } = message
+
+        if (c.nickname != nickname) {
+            const userChat = await userChatService.getByUserIdAndChatId(userId, chatId)
+
+            if (userChat) {
+                c.write(`data: ${content}\n\n`)
+            }
+        }
+    })
+}
 
 const messageController = {
     create: async (request, response) => {
@@ -30,6 +47,9 @@ const messageController = {
             const { content } = payload
 
             const message = await messageService.create({ content, chat_id: chatId, user_id: userId })
+            
+            messageBroadcast(user, chat, message)
+
             return response.status(200).send({ message: true, data: { message }, message: 'Success to get message'})
         }
 

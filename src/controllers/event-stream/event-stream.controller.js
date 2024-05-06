@@ -2,6 +2,7 @@ let clients = []
 
 const eventStreamController = {
     clientConnection: async (request, client) => {
+        
         client.writeHead(200, {
             "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
@@ -18,15 +19,12 @@ const eventStreamController = {
 
             if (!client_online) {
                 clients.push(client)
-                client.write(`data: 🖖 Welcome to chat ${nickname}\n\n`)
             }
 
             request.on('close', async () => {
                 clients = clients.filter(c => c.nickname !== nickname)
                 console.log('Disconnected')
             })
-
-
         }
 
         catch (error) {
@@ -37,4 +35,5 @@ const eventStreamController = {
     }
 }
 
+export { clients }
 export default eventStreamController
