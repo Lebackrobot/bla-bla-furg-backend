@@ -3,6 +3,8 @@ import { chatCreateSchema, chatMemberSchema } from '../../modules/chats/chat.sch
 import chatService from '../../services/chat/chat.service.js'
 import userChatService from '../../services/user-chat/user-chat.service.js'
 
+let clients = []
+
 const chatController = {
     getById: async (request, response) => {
         try {

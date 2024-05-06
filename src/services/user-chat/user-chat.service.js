@@ -1,8 +1,8 @@
 import userChatModel from '../../modules/user-chat/user-chat.model.js'
 
 const userChatService = {
-    getById: async (id) => {
-        const query = await chatModel.findByPk(id)
+    getAll: async () => {
+        const query = await userChatModel.findAll()
         return query ? query.dataValues : undefined
     },
 
