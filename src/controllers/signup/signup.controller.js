@@ -3,11 +3,12 @@ import { userCreateSchema } from '../../modules/users/user.schema.js'
 import userService from '../../services/user/user.service.js'
 
 const signupController = {
-    createUser: async (request, response) => {
+    create: async (request, response) => {
         try {
             const { error, value: payload } = userCreateSchema.validate(request.body)
 
             if (error) {
+                console.error(error)
                 return response.status(400).send({ success: false, message: error.details })
             }
 
@@ -18,7 +19,7 @@ const signupController = {
             }
 
             payload.password = await encryptPassword(payload.password)
-            const newUser = await userService.createUser(payload)
+            const newUser = await userService.create(payload)
 
             return response.status(201).send({ success: true, data: { user: newUser }, message: 'Success to create user' })
         }

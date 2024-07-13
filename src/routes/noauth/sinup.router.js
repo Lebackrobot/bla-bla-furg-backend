@@ -3,7 +3,7 @@ import signupController from '../../controllers/signup/signup.controller.js'
 
 const signupRouter = express.Router()
 
-signupRouter.post('/signup', signupController.createUser)
+signupRouter.post('/signup', signupController.create)
 
 
 export default signupRouter

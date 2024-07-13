@@ -1,6 +1,11 @@
 import  userModel from '../../modules/users/user.model.js'
 
 const userService = {
+    getById: async (id) => {
+        const query = await userModel.findByPk(id) 
+        return query ? query.dataValues : undefined
+    },
+
     getByEmail: async (email) => {
         const query = await userModel.findOne({ where: { email: email } })
         return query ? query.dataValues : undefined
@@ -12,7 +17,7 @@ const userService = {
 
     },
 
-    createUser: async (user) => {  
+    create: async (user) => {  
         const query = await userModel.create(user) 
         return query ? query.dataValues : undefined
 

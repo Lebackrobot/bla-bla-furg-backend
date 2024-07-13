@@ -6,9 +6,9 @@ import userService from './../../services/user/user.service.js'
 
 
 export default {
-    signin: async (require, response) => {
+    signin: async (request, response) => {
         try {
-            const { email, password } =  require.body
+            const { email, password } =  request.body
 
             if (!email || !password) {
                 return response.status(400).send({ success: false, message: 'Email and password are required'})
@@ -28,7 +28,7 @@ export default {
             }
             
             const secretKey = process.env.JWT_SECRET_KEY
-            const token = jwt.sign(user, secretKey, { expiresIn: '48h' });
+            const token = jwt.sign({ userId: user.id }, secretKey);
 
             return response.status(200).send({ success: true, data: { token }, message: 'Success to signin'})
         }   
