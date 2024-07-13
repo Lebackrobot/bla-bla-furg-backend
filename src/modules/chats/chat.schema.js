@@ -8,7 +8,8 @@ const chatCreateSchema = Joi.object({
 })
 
 const chatMemberSchema = Joi.object({
-    chatId: Joi.number().required()
+    chatId: Joi.number().required(),
+    password: Joi.string()
 })
 
 export { chatCreateSchema, chatMemberSchema }

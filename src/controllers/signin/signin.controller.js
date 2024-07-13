@@ -28,7 +28,7 @@ export default {
             }
             
             const secretKey = process.env.JWT_SECRET_KEY
-            const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '48h' });
+            const token = jwt.sign({ userId: user.id }, secretKey);
 
             return response.status(200).send({ success: true, data: { token }, message: 'Success to signin'})
         }   

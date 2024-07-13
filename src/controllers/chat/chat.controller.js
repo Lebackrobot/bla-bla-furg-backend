@@ -84,7 +84,7 @@ const chatController = {
             }
     
             if (chat.visibility == 'PRIVATE' && payload.password) {
-                const authorizedPassword = await verifyPassword(password, user.password)
+                const authorizedPassword = await verifyPassword(payload.password, chat.password)
              
                 if (!authorizedPassword) {
                     return response.status(401).send({ success: false, message: 'Invalid password'})
