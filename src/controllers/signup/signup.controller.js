@@ -1,3 +1,5 @@
+import dicebearApi from '../../apis/dicebear.api.js'
+import invertexto from '../../apis/invertexto.api.js'
 import { encryptPassword } from '../../libraries/password-crypto.js'
 import { userCreateSchema } from '../../modules/users/user.schema.js'
 import userService from '../../services/user/user.service.js'
@@ -28,6 +30,13 @@ const signupController = {
             console.error(error)
             return response.status(500).send({ success: false, message: 'Internal server error'})
         }
+    },
+
+    makeAvatar: async (request, response) => {
+        const name = await invertexto.getRandomName()
+        const avatar = await dicebearApi.getImageByName(name)
+
+        return response.status(200).send({ success: true, info: { avatar }, message: 'avatar criado!'})
     }
 }
 
