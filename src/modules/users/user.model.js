@@ -11,7 +11,13 @@ const userModel = sequelize.define('users', {
     nickname: {
         type: DataTypes.STRING,
         field: 'nickname',
-        allowNUll: false
+        allowNull: false
+    },
+
+    avatar: {
+        type: DataTypes.BLOB,
+        field: 'avatar',
+        allowNull: true
     },
 
     email: {

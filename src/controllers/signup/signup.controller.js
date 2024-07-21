@@ -7,6 +7,7 @@ import userService from '../../services/user/user.service.js'
 const signupController = {
     create: async (request, response) => {
         try {
+            console.log(request.body)
             const { error, value: payload } = userCreateSchema.validate(request.body)
 
             if (error) {
@@ -20,10 +21,17 @@ const signupController = {
                 return response.status(409).send({ success: false, message: 'Email or nickname alredy exist'})
             }
 
+            if (payload.avatar) {
+                payload.avatar = Buffer.from(payload.avatar, 'utf-8')
+            }
+
             payload.password = await encryptPassword(payload.password)
             const newUser = await userService.create(payload)
 
-            return response.status(201).send({ success: true, data: { user: newUser }, message: 'Success to create user' })
+            const secretKey = process.env.JWT_SECRET_KEY
+            const token = jwt.sign({ userId: user.id }, secretKey)
+
+            return response.status(201).send({ success: true, data: { userId: newUser.id, token }, message: 'Success to create user' })
         }
 
         catch (error) {
@@ -36,7 +44,7 @@ const signupController = {
         const name = await invertexto.getRandomName()
         const avatar = await dicebearApi.getImageByName(name)
 
-        return response.status(200).send({ success: true, info: { avatar }, message: 'avatar criado!'})
+        return response.status(200).send({ success: true, avatar, message: 'Avatar criado com sucesso.'})
     }
 }
 
