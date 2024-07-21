@@ -30,9 +30,9 @@ const signupController = {
             const newUser = await userService.create(payload)
 
             const secretKey = process.env.JWT_SECRET_KEY
-            const token = jwt.sign({ userId: user.id }, secretKey)
+            const token = jwt.sign({ userId: newUser.id }, secretKey)
 
-            return response.status(201).send({ success: true, data: { userId: newUser.id, token }, message: 'Success to create user' })
+            return response.status(201).send({ success: true, info: { token }, message: 'Success to create user' })
         }
 
         catch (error) {
