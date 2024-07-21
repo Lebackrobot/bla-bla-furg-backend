@@ -3,6 +3,7 @@ import invertexto from '../../apis/invertexto.api.js'
 import { encryptPassword } from '../../libraries/password-crypto.js'
 import { userCreateSchema } from '../../modules/users/user.schema.js'
 import userService from '../../services/user/user.service.js'
+import jwt from 'jsonwebtoken'
 
 const signupController = {
     create: async (request, response) => {
