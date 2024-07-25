@@ -15,7 +15,7 @@ const userModel = sequelize.define('users', {
     },
 
     avatar: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         field: 'avatar',
         allowNull: true
     },

@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../../config/db-connect.js'
 import userModel from '../users/user.model.js'
-import chatModel from '../chats/chat.model.js'
+/* import chatModel from '../chats/chat.model.js' */
 
 const messageModel = sequelize.define('messages', {
     id: {
@@ -31,6 +31,6 @@ const messageModel = sequelize.define('messages', {
 })
 
 messageModel.belongsTo(userModel, { foreignKey: 'user_id'})
-messageModel.belongsTo(chatModel, { foreignKey: 'chat_id'})
+/* messageModel.belongsTo(chatModel, { foreignKey: 'chat_id'}) */
 
 export default messageModel

@@ -30,7 +30,9 @@ const userChatModel = sequelize.define('users_chats', {
     }
 })
 
-userChatModel.belongsTo(userModel, { foreignKey: 'user_id'})
-userChatModel.belongsTo(chatModel, { foreignKey: 'chat_id'})
+userChatModel.belongsTo(userModel, { foreignKey: 'user_id' })
+userChatModel.belongsTo(chatModel, { foreignKey: 'chat_id' })
+userModel.belongsToMany(chatModel, { through: userChatModel, foreignKey: 'user_id' })
+chatModel.belongsToMany(userModel, { through: userChatModel, foreignKey: 'chat_id' })
 
 export default userChatModel
