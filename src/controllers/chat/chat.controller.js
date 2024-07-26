@@ -3,9 +3,19 @@ import { chatCreateSchema, chatMemberSchema } from '../../modules/chats/chat.sch
 import chatService from '../../services/chat/chat.service.js'
 import userChatService from '../../services/user-chat/user-chat.service.js'
 
-let clients = []
-
 const chatController = {
+    get: async (request, response) => {
+        try {
+            const chats = await chatService.get()
+
+            return response.status(200).send({ success: true, info: { chats }, message: 'Query executada com sucesso.'})
+        }
+
+        catch (error) {
+            return response.status(500).send({ success: false, message: 'Erro interno no servidor.'})
+        }
+    },
+    
     getById: async (request, response) => {
         try {
             const { id } = request.params
@@ -15,7 +25,7 @@ const chatController = {
                 return response.status(404).send({ success: false, message: 'chat not found'})
             }
     
-            return response.status(200).send({ success: true, data: { chat }, message: 'Success to response chat'})
+            return response.status(200).send({ success: true, info: { chat }, message: 'Success to response chat'})
         }
 
         catch (error) {
@@ -48,7 +58,7 @@ const chatController = {
             const chat = await chatService.create(payload)
             await userChatService.create({ user_id: user.id, chat_id: chat.id, role: 'HOST'})
             
-            return response.status(200).send({ success: true, data: { chat }, message: 'Chat created' })
+            return response.status(200).send({ success: true, info: { chat }, message: 'Chat created' })
         }
 
         catch (error) {

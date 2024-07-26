@@ -9,6 +9,7 @@ export const up = function(knex) {
     table.string('title').notNullable()
     table.string('description').notNullable()
     table.string('password')
+    table.string('type', ['STUDY', 'NOTIFY', 'FUN']).notNullable()
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
   })

@@ -4,6 +4,7 @@ const chatCreateSchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
     visibility: Joi.string().valid('PUBLIC', 'PRIVATE').required(),
+    type: Joi.string().valid('STUDY', 'NOTIFY', 'FUN').required(),
     password: Joi.string()
 })
 

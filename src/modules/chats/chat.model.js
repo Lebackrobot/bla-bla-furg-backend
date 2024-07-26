@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../../config/db-connect.js'
+import messageModel from '../messages/message.model.js'
 
 
 const chatModel = sequelize.define('chats', {
@@ -7,6 +8,11 @@ const chatModel = sequelize.define('chats', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
+    },
+
+    type: {
+        type: DataTypes.ENUM('STUDY', 'NOTIFY', 'FUN'),
+        allowNull: false
     },
 
     visibility: {
@@ -43,5 +49,8 @@ const chatModel = sequelize.define('chats', {
         allowNull: false
     }
 })
+
+chatModel.hasMany(messageModel, { foreignKey: 'chat_id' })
+messageModel.belongsTo(chatModel, { foreignKey: 'chat_id' })
 
 export default chatModel

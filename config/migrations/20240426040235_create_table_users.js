@@ -9,7 +9,7 @@ export const up = function (knex) {
         table.string('nickname').notNullable().unique()
         table.string('password').notNullable()
         table.string('email').notNullable().unique()
-        table.binary('avatar')
+        table.string('avatar')
         table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
         table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable()
     })
