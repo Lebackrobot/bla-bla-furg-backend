@@ -5,12 +5,13 @@ import signinRouter from './noauth/signin.router.js'
 import chatRouter from './auth/chat.router.js'
 import messageRouter from './auth/message.router.js'
 import eventStreamRouter from './auth/event-stream.router.js'
+import noAuthChatRouter from './noauth/chats.router.js'
 
 const routes = (app) => {
     app.use(express.json())
 
     app.use('/auth', authorization, chatRouter, messageRouter, eventStreamRouter)
-    app.use('/noauth', signupRouter, signinRouter)
+    app.use('/noauth', signupRouter, signinRouter, noAuthChatRouter)
 }
 
 export { routes }
