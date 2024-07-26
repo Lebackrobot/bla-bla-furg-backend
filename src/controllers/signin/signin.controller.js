@@ -30,7 +30,7 @@ export default {
             const secretKey = process.env.JWT_SECRET_KEY
             const token = jwt.sign({ userId: user.id }, secretKey);
 
-            return response.status(200).send({ success: true, data: { token }, message: 'Sucesso no login.'})
+            return response.status(200).send({ success: true, info: { token, userId: user.id }, message: 'Sucesso no login.'})
         }   
         
         catch (error) {

@@ -15,9 +15,10 @@ const eventStreamController = {
             client.nickname = nickname
             client.email = email
 
-            const client_online = clients.find(c => c.nickname == nickname)
+            const onlineClients = clients.find(c => c.nickname == nickname)
 
-            if (!client_online) {
+            if (!onlineClients) {
+                console.log('👋 client connection')
                 clients.push(client)
             }
 

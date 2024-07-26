@@ -19,11 +19,7 @@ const signupController = {
             let user = await userService.getByEmail(payload.email) || await userService.getByNickname(payload.nickname)
             
             if (user) {
-                return response.status(409).send({ success: false, message: 'Email or nickname alredy exist'})
-            }
-
-            if (payload.avatar) {
-                payload.avatar = Buffer.from(payload.avatar, 'utf-8')
+                return response.status(409).send({ success: false, message: 'Email ou nickname já existe.'})
             }
 
             payload.password = await encryptPassword(payload.password)
@@ -32,12 +28,12 @@ const signupController = {
             const secretKey = process.env.JWT_SECRET_KEY
             const token = jwt.sign({ userId: newUser.id }, secretKey)
 
-            return response.status(201).send({ success: true, info: { token }, message: 'Success to create user' })
+            return response.status(201).send({ success: true, info: { token, userId: newUser.id }, message: 'Sucesso ao criar usuário.' })
         }
 
         catch (error) {
             console.error(error)
-            return response.status(500).send({ success: false, message: 'Internal server error'})
+            return response.status(500).send({ success: false, message: 'Erro interno no servidor'})
         }
     },
 
@@ -45,7 +41,7 @@ const signupController = {
         const name = await invertexto.getRandomName()
         const avatar = await dicebearApi.getImageByName(name)
 
-        return response.status(200).send({ success: true, avatar, message: 'Avatar criado com sucesso.'})
+        return response.status(200).send({ success: true, info: {avatar, name}, message: 'Avatar criado com sucesso.'})
     }
 }
 
