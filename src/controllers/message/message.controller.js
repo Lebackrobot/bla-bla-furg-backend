@@ -34,13 +34,13 @@ const messageController = {
             const chat = await chatService.getById(payload.chatId)
 
             if (!chat) {
-                return response.status(404).send({ success: false, message: 'Not found chat'})
+                return response.status(404).send({ success: false, message: 'Chat não encontrado.'})
             }
 
             const userChat = await userChatService.getByUserIdAndChatId(userId, chat.id)
 
             if (!userChat) {
-                return response.status(401).send({ success: false, message: 'Unauthorized'})
+                return response.status(401).send({ success: false, message: 'Não autorizado.'})
             }
 
             const { id: chatId } = chat
@@ -48,21 +48,21 @@ const messageController = {
 
             const message = await messageService.create({ content, chat_id: chatId, user_id: userId })
             
-            messageBroadcast(user, chat, message)
+            //messageBroadcast(user, chat, message)
 
-            return response.status(200).send({ message: true, data: { message }, message: 'Success to get message'})
+            return response.status(200).send({ message: true, info: { message }, message: 'Sucesso para criar a mensagem.'})
         }
 
         catch (error) {
             console.error(error)
-            return response.status(500).send({ success: false, message: 'Internal server error'})
+            return response.status(500).send({ success: false, message: 'Erro interno no servidor.'})
         }
     },
 
     getAll: async (request, response) => {
         try {
             const messages = messageService.getAll()
-            return response.status(200).send({ success: true, data: { messages }, message: 'Success to get mesages' })
+            return response.status(200).send({ success: true, info: { messages }, message: 'Success to get mesages' })
         }
 
         catch (error) {
