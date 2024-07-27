@@ -6,11 +6,16 @@ const chatService = {
     get: async () => {
         const query = await chatModel.findAll({
             include: [
-                { model: messageModel, as: 'messages', order: [['created_at', 'ASC']]},
+                { 
+                    model: messageModel, 
+                    as: 'messages', 
+                    separate: true,
+                    order: [['created_at', 'ASC']]
+                },
                 { model: userModel }
             ]
         })
-        
+
         const chats = []
 
         query.forEach(chat => {
@@ -25,6 +30,7 @@ const chatService = {
             include: [{
                 model: messageModel,
                 as: 'messages',
+                separate: true,
                 order: [['created_at', 'ASC']]
             }]
         })
