@@ -4,17 +4,21 @@ import messageService from '../../services/message/message.service.js'
 import userChatService from '../../services/user-chat/user-chat.service.js'
 import { clients } from '../event-stream/event-stream.controller.js'
 
-const messageBroadcast = async (client, chat, message) => {
+const messageBroadcast = async (client, chatId, message) => {
     clients.forEach(async (c) => {
         const { id: userId, nickname } = client
-        const { chatId } = chat
         const { content } = message
 
         if (c.nickname != nickname) {
             const userChat = await userChatService.getByUserIdAndChatId(userId, chatId)
 
+            const  responseJson = JSON.stringify({
+                message,
+                chatId 
+            })
+
             if (userChat) {
-                c.write(`data: ${content}\n\n`)
+                c.write(`data: ${responseJson}\n\n`)
             }
         }
     })
@@ -43,14 +47,12 @@ const messageController = {
                 return response.status(401).send({ success: false, message: 'Não autorizado.'})
             }
 
-            const { id: chatId } = chat
             const { content } = payload
-
-            const message = await messageService.create({ content, chat_id: chatId, user_id: userId })
+            const message = await messageService.create({ content, chat_id: chat.id, user_id: userId })
             
-            //messageBroadcast(user, chat, message)
+            messageBroadcast(request.user, chat.id, message)
 
-            return response.status(200).send({ message: true, info: { message }, message: 'Sucesso para criar a mensagem.'})
+            return response.status(200).send({ success: true, info: { message }, message: 'Sucesso para criar a mensagem.'})
         }
 
         catch (error) {
@@ -59,15 +61,22 @@ const messageController = {
         }
     },
 
-    getAll: async (request, response) => {
+    getChatMessages: async (request, response) => {
         try {
-            const messages = messageService.getAll()
-            return response.status(200).send({ success: true, info: { messages }, message: 'Success to get mesages' })
+            const { chatId } = request.params
+            const messages = await messageService.getMessagesByChatId(chatId)
+
+            console.log(messages)
+            if (!messages) {
+                return response.status(404).send({ success: false, message: 'Chat não encontrado.'})
+            }
+            
+            return response.status(200).send({ success: true, info: { messages }, message: 'Mensagens consultadas com sucesso' })            
         }
 
         catch (error) {
             console.error(error)
-            return response.status(500).send({ success: false, message: 'Internal server error'})
+            return response.status(500).send({ success: false, message: 'Erro interno no servidor.'})
         }
     }
 }
