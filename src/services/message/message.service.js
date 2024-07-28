@@ -1,5 +1,6 @@
+import chatModel from '../../modules/chats/chat.model.js'
 import messageModel from '../../modules/messages/message.model.js'
-import chatService from '../chat/chat.service.js'
+import userModel from '../../modules/users/user.model.js'
 
 const messageService = {
     getAll: async () => {
@@ -7,8 +8,20 @@ const messageService = {
         return query ? query.dataValues : undefined
     },
 
+
     getMessagesByChatId: async (chatId) => {
-        const chat = await chatService.getById(chatId)
+        const query = await chatModel.findByPk(chatId, {
+            include: {
+                model: messageModel,
+                as: 'messages',
+                include: {
+                    model: userModel,
+                    as: 'user'
+                }
+            }
+        })
+
+        const chat = query ? query.dataValues : undefined
 
         if (!chat) {
             return undefined

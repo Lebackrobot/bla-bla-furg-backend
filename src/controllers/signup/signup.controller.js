@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken'
 const signupController = {
     create: async (request, response) => {
         try {
-            console.log(request.body)
             const { error, value: payload } = userCreateSchema.validate(request.body)
 
             if (error) {

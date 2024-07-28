@@ -8,7 +8,11 @@ const chatService = {
             include: [
                 { 
                     model: messageModel, 
-                    as: 'messages', 
+                    as: 'messages',
+                    include: {
+                        model: userModel,
+                        as: 'user'
+                    },
                     separate: true,
                     order: [['created_at', 'ASC']]
                 },
@@ -30,6 +34,10 @@ const chatService = {
             include: [{
                 model: messageModel,
                 as: 'messages',
+                include: {
+                    model: userModel,
+                    as: 'user'
+                },
                 separate: true,
                 order: [['created_at', 'ASC']]
             }]
