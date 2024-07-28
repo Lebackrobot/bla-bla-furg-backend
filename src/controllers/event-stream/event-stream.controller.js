@@ -29,7 +29,7 @@ const eventStreamController = {
         }
 
         catch (error) {
-            console.error(error)
+            console.error('Erro interno no servidor')
             client.writeHead(500, { "Content-Type": "text/plain" });
             client.end("Internal Server Error");
         }
