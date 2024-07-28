@@ -17,7 +17,9 @@ const messageService = {
                 include: {
                     model: userModel,
                     as: 'user'
-                }
+                },
+                separate: true,
+                order: [['created_at', 'ASC']]
             }
         })
 
