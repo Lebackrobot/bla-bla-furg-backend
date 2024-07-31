@@ -19,7 +19,7 @@ const messageService = {
                     as: 'user'
                 },
                 separate: true,
-                order: [['created_at', 'ASC']]
+                order: [['created_at', 'DESC']]
             }
         })
 

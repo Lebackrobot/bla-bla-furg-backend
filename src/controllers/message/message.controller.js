@@ -5,16 +5,15 @@ import userChatService from '../../services/user-chat/user-chat.service.js'
 import { clients } from '../event-stream/event-stream.controller.js'
 
 const messageBroadcast = async (client, chatId, message) => {
+
     clients.forEach(async (c) => {
         const { id: userId, nickname } = client
-        const { content } = message
 
         if (c.nickname != nickname) {
             const userChat = await userChatService.getByUserIdAndChatId(userId, chatId)
 
             const  responseJson = JSON.stringify({
-                message,
-                chatId 
+                chatId: chatId
             })
 
             if (userChat) {
@@ -66,7 +65,6 @@ const messageController = {
             const { chatId } = request.params
             const messages = await messageService.getMessagesByChatId(chatId)
 
-            console.log(messages)
             if (!messages) {
                 return response.status(404).send({ success: false, message: 'Chat não encontrado.'})
             }

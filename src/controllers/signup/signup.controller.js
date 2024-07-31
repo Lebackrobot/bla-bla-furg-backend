@@ -1,6 +1,7 @@
 import dicebearApi from '../../apis/dicebear.api.js'
 import invertexto from '../../apis/invertexto.api.js'
 import { encryptPassword } from '../../libraries/password-crypto.js'
+import { getRandomName } from '../../libraries/random-name.js'
 import { userCreateSchema } from '../../modules/users/user.schema.js'
 import userService from '../../services/user/user.service.js'
 import jwt from 'jsonwebtoken'
@@ -37,7 +38,8 @@ const signupController = {
     },
 
     makeAvatar: async (request, response) => {
-        const name = await invertexto.getRandomName()
+        //const name = await invertexto.getRandomName()
+        const name = await getRandomName()
         const avatar = await dicebearApi.getImageByName(name)
 
         return response.status(200).send({ success: true, info: {avatar, name}, message: 'Avatar criado com sucesso.'})

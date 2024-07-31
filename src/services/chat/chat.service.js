@@ -14,7 +14,7 @@ const chatService = {
                         as: 'user'
                     },
                     separate: true,
-                    order: [['created_at', 'ASC']]
+                    order: [['created_at', 'DESC']]
                 },
                 { model: userModel }
             ]
@@ -39,7 +39,7 @@ const chatService = {
                     as: 'user'
                 },
                 separate: true,
-                order: [['created_at', 'ASC']]
+                order: [['created_at', 'DESC']]
             }]
         })
 
