@@ -1,0 +1,22 @@
+import { prisma } from '../../config/db-connect.js'
+
+const messageService = {
+    getByRoomId: async (roomId) => {
+        return await prisma.message.findMany({
+            where: { roomId },
+            include: {
+                user: true 
+            },
+
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+    },
+
+    create: async (message) => {
+        return await prisma.message.create(message)
+    }
+}
+
+export default messageService
