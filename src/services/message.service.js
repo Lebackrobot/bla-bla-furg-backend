@@ -3,7 +3,7 @@ import { prisma } from '../../config/db-connect.js'
 const messageService = {
     getByRoomId: async (roomId) => {
         return await prisma.message.findMany({
-            where: { roomId },
+            where: { roomId: parseInt(roomId) },
             include: {
                 user: true 
             },

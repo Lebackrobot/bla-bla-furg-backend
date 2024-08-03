@@ -13,8 +13,8 @@ const userService = {
         })
     },
 
-    create: async () => {
-        return await prisma.user.create({ data: group })
+    create: async (user) => {
+        return await prisma.user.create({ data: user })
     },
 }
 
