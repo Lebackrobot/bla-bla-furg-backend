@@ -1,3 +1,4 @@
+import { rabbitPublish } from '../../config/rabbit-connect.js'
 import responseTemplate from '../libs/response-template.js'
 import { messageCreateSchema } from '../schemas/message.schema.js'
 import messageService from '../services/message.service.js'
@@ -42,7 +43,8 @@ const messageController = {
             }
 
 
-            await messageService.create({ ...payload, userId: user.id})
+            const newMessage = await messageService.create({ ...payload, userId: user.id})
+            await rabbitPublish(newMessage)
 
             return response.status(201).send(responseTemplate.CREATED_201)
         }
