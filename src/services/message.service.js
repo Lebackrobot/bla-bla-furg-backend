@@ -9,13 +9,13 @@ const messageService = {
             },
 
             orderBy: {
-                createdAt: 'desc'
+                createdAt: 'asc'
             }
         })
     },
 
     create: async (message) => {
-        return await prisma.message.create(message)
+        return await prisma.message.create({ data: {...message }})
     }
 }
 

@@ -1,9 +1,9 @@
 import Joi from 'joi'
 
 const messageCreateSchema = Joi.object({
-    userId: Joi.integer(),
-    roomId: Joi.integer(),
-    content: Joi.string()
+    roomId: Joi.number().required(),
+    content: Joi.string().required(),
+    userId: Joi.number(),
 })
 
 export { messageCreateSchema }
