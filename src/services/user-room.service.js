@@ -10,6 +10,10 @@ const userRoomService = {
         })
     },
 
+    getUserByNickname: async (nickname) => {
+        return await prisma.user.findFirst({ where: { nickname }})
+    },
+    
     create: async (userRoom) => {
         return await prisma.userRoom.create({ data: {...userRoom}})
     }
