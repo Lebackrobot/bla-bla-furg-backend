@@ -5,11 +5,11 @@ const messageService = {
         return await prisma.message.findMany({
             where: { roomId: parseInt(roomId) },
             include: {
-                user: true 
+                user: true
             },
 
             orderBy: {
-                createdAt: 'asc'
+                createdAt: 'desc'
             }
         })
     },

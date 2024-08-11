@@ -1,9 +1,24 @@
-import { rabbitPublish } from '../../config/rabbit-connect.js'
 import responseTemplate from '../libs/response-template.js'
 import { messageCreateSchema } from '../schemas/message.schema.js'
 import messageService from '../services/message.service.js'
 import roomService from '../services/room.service.js'
 import userRoomService from '../services/user-room.service.js'
+import { ONLINE_CLIENTS } from '../controllers/event-stream.controller.js'
+
+const messageBroadcast = async (user, room, message) => {
+    ONLINE_CLIENTS.forEach(clientSocket => {
+
+        if (clientSocket.nickname != user.nickname) {
+            const responseJson = JSON.stringify({ roomId: room.id, message })
+
+            const roomMember = room.members.find(member => member.user.nickname === user.nickname)
+
+            if (roomMember) {
+                clientSocket.write(`data: ${responseJson}\n\n`)
+            }
+        }
+    })
+}
 
 const messageController = {
     getByRoomId: async (request, response) => {
@@ -43,8 +58,12 @@ const messageController = {
             }
 
 
-            const newMessage = await messageService.create({ ...payload, userId: user.id})
-            await rabbitPublish(newMessage)
+            const message = await messageService.create({ ...payload, userId: user.id})
+            
+            // 🐇 Abordando a ideia do Rabbit MQ
+            // await rabbitPublish(newMessage)
+
+            messageBroadcast(user, room, message)
 
             return response.status(201).send(responseTemplate.CREATED_201)
         }

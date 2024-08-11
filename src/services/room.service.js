@@ -2,7 +2,11 @@ import { prisma } from '../../config/db-connect.js'
 
 const roomService = {
     get: async () => {
-        return await prisma.room.findMany()
+        return await prisma.room.findMany({
+            include: {
+                members: true
+            }
+        })
     },
 
     getByName: async (name) => {
@@ -17,7 +21,17 @@ const roomService = {
     },
 
     getById: async (id) => {
-        return await prisma.room.findUnique({ where: { id: parseInt(id) }})
+        return await prisma.room.findUnique({
+            where: { id: parseInt(id) },
+            include: {
+                members: {
+                    include: {
+                        user: true
+                    }
+                }
+            }
+        })
+
     },
 
     create: async (room) => {

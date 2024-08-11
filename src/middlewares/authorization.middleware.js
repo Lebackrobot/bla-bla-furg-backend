@@ -3,7 +3,7 @@ import userService from '../services/user.service.js'
 
 const authorizationMiddleware = (request, response, next) => {
     const secretKey = process.env.JWT_SECRET_KEY
-    const token = request.headers.authorization || request.headers.Authorization || request.params.token
+    const token = request.headers.authorization || request.headers.Authorization || request.query.token
 
     if (!token) {
         return response.status(401).send({ success: false, message: 'Token is required' })

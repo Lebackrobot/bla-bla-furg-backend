@@ -42,12 +42,7 @@ const rabbitPublish = async (message) => {
         await channel.assertQueue(RABBIT_QUEUE, { durable: true })
 
         channel.sendToQueue(RABBIT_QUEUE, Buffer.from(JSON.stringify(message)))
-
-        setTimeout(() => {
-            console.log('🐇 send message to rabbit!')
-            connection.close()
-
-        }, 2000)
+        console.log('🐇 send message to rabbit!')
     }
 
     catch (error) {

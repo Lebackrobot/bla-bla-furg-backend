@@ -1,3 +1,5 @@
+import { compare } from 'bcrypt'
+import { encryptPassword, verifyPassword } from '../libs/password-crypto.js'
 import roomService from '../services/room.service.js'
 import userRoomService from '../services/user-room.service.js'
 import responseTemplate from './../libs/response-template.js'
@@ -6,7 +8,7 @@ import { roomCreateSchema, roomMemberSchema } from './../schemas/room.schema.js'
 const roomController = {
     get: async (request, response) => {
         try {
-            const rooms = roomService.get()
+            const rooms = await roomService.get()
             return response.status(200).send({ ...responseTemplate.OK_200, info: { rooms } })
         }
         
@@ -52,6 +54,11 @@ const roomController = {
             if (room) {
                 return response.status(409).send(responseTemplate.CONFLICT_409)
             }
+
+            if (payload.visibility === 'PRIVATE') {
+                console.log(payload)
+                payload.password = await encryptPassword(payload.password)
+            }
     
             const newRoom = await roomService.create(payload)
             await userRoomService.create({ userId: user.id, roomId: newRoom.id, role: 'HOST' })
@@ -85,10 +92,16 @@ const roomController = {
             if (member) {
                 return response.status(409).send(responseTemplate.CONFLICT_409)
             }
-    
+
+            // Password validation
+            if (payload.password && !await verifyPassword(payload.password, room.password)) {
+                return response.status(400).send(responseTemplate.BAD_REQUEST_400)
+            }
+
+            console.log('>>>>>>>>', user)
             await userRoomService.create({
-                ...payload,
-                userId: user.id
+                userId: user.id,
+                roomId: room.id
             })
 
             return response.status(201).send(responseTemplate.CREATED_201)

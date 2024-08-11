@@ -10,7 +10,8 @@ const roomCreateSchema = Joi.object({
 
 const roomMemberSchema = Joi.object({
     roomId: Joi.number().required(),
-    userId: Joi.number()
+    userId: Joi.number(),
+    password: Joi.string()
 })
 
 

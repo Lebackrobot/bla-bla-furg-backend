@@ -7,8 +7,7 @@ const startServer = async () => {
     dotenv.config()
     const port = process.env.PORT || 4000
 
-    await rabbitConnect()
-
+    // await rabbitConnect()
     app.listen(port, () => console.log(`💬 Server listen on port ${port}`))
 }
 
