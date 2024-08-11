@@ -52,7 +52,7 @@ const roomController = {
             const room = await roomService.getByName(payload.name)
 
             if (room) {
-                return response.status(409).send(responseTemplate.CONFLICT_409)
+                return response.status(409).send({ ...responseTemplate.CONFLICT_409, message: 'Room name already exist.' })
             }
 
             if (payload.visibility === 'PRIVATE') {
@@ -93,12 +93,10 @@ const roomController = {
                 return response.status(409).send(responseTemplate.CONFLICT_409)
             }
 
-            // Password validation
             if (payload.password && !await verifyPassword(payload.password, room.password)) {
-                return response.status(400).send(responseTemplate.BAD_REQUEST_400)
+                return response.status(400).send({...responseTemplate.BAD_REQUEST_400, message: 'Invalid password'})
             }
 
-            console.log('>>>>>>>>', user)
             await userRoomService.create({
                 userId: user.id,
                 roomId: room.id
