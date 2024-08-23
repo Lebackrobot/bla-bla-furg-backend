@@ -13,8 +13,8 @@ O database foi modelado com auxilio do ORM Prisma, utilizando PostegreSQL como S
 
 ## Rodando o backend
 
-Para subir o servidor localmente, será necessário certificar de que o servidor o database PostgreSQL esteje rodando na porta default, 5432. Uma vez confirmado isso, basta instalar as dependências e rodar o projeto:
+Para subir o servidor localmente, será necessário certificar de que o servidor o database PostgreSQL esteje rodando na porta default, 5432. Uma vez confirmado isso, basta rodar as migrations de database, instalar as dependências e rodar o projeto:
 
 ```shell
-  npm install && npm start
+  npm install && npm run migrate && npm start
 ```
